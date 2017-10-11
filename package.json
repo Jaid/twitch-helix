@@ -1,0 +1,50 @@
+{
+    "license": "MIT",
+    "author": {
+        "name": "Jaid",
+        "url": "https://github.com/jaid",
+        "email": "jaid.jsx@gmail.com"
+    },
+    "version": "0.1.0",
+    "name": "twitch-helix",
+    "bugs": {
+        "url": "https://github.com/jaid/jaid-web/issues"
+    },
+    "homepage": "https://github.com/jaid/jaid-web#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jaid/deepbot-simulator"
+    },
+    "description": "Little helper class for the new Twitch Helix API",
+    "engines": {
+        "node": ">=8"
+    },
+    "dependencies": {
+        "debug": "^3.1.0",
+        "lodash": "^4.17.4",
+        "request": "^2.83.0"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-plugin-lodash": "^3.2.11",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.0",
+        "babel-preset-minify": "^0.2.0",
+        "babel-preset-stage-2": "^6.24.1",
+        "gulp": "^3.9.1",
+        "gulp-babel": "^7.0.0",
+        "gulp-clean": "^0.3.2",
+        "np": "^2.16.0"
+    },
+    "scripts": {
+        "prepare": "npm run build-prod",
+        "clean": "./node_modules/.bin/gulp clean",
+        "build-prod": "NODE_ENV=production ./node_modules/.bin/gulp babel",
+        "build-dev": "./node_modules/.bin/gulp babel",
+        "bump-and-publish": "node -r chalk -e 'const chalk = require(\"chalk\");console.log(`${chalk.red(\"Run\")} ${chalk.yellow(\"node_modules/.bin/np\")} ${chalk.red(\"in console. See https://github.com/sindresorhus/np/issues/143\")}`)'"
+    },
+    "files": [
+        "src/index.js"
+    ],
+    "main": "src/index.js"
+}

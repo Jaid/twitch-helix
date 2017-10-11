@@ -1,0 +1,39 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "node": "8"
+                }
+            }
+        ],
+        "stage-2"
+    ],
+    "plugins": [
+        "transform-runtime"
+    ],
+    "env": {
+        "production": {
+            "comments": false,
+            "presets": [
+                [
+                    "minify",
+                    // https://github.com/babel/minify/tree/master/packages/babel-preset-minify#options
+                    {
+                        // https://github.com/babel/minify/issues/556
+                        "mangle": false,
+                        "removeConsole": true,
+                        "removeDebugger": true
+                    }
+                ]
+            ],
+            "plugins": [
+                "lodash"
+            ]
+        },
+        "development": {
+            "sourceMaps": "inline"
+        }
+    }
+}

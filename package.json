@@ -34,10 +34,12 @@
         "gulp": "^3.9.1",
         "gulp-babel": "^7.0.0",
         "gulp-clean": "^0.3.2",
+        "jest": "^21.2.1",
         "np": "^2.16.0"
     },
     "scripts": {
         "prepare": "npm run build-prod",
+        "test": "npm run clean && jest",
         "clean": "./node_modules/.bin/gulp clean",
         "build-prod": "NODE_ENV=production ./node_modules/.bin/gulp babel",
         "build-dev": "./node_modules/.bin/gulp babel",

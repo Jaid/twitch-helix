@@ -2,7 +2,7 @@
 Little helper class for the new Twitch API described in current [Twitch API docs](https://dev.twitch.tv/docs/api/reference).<br>
 [Transpiled and minified](https://unpkg.com/twitch-helix) with Babel.
 
-[![NPM](https://nodei.co/npm/twitch-helix.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/twitch-helix/)
+[![npm Stats](https://nodei.co/npm/twitch-helix.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/twitch-helix/)
 
 [![Travis Build Status](https://api.travis-ci.org/Jaid/twitch-helix.svg)](https://travis-ci.org/Jaid/twitch-helix)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Jaid/twitch-helix.svg)](https://gemnasium.com/github.com/Jaid/twitch-helix)
@@ -30,12 +30,12 @@ Import the default class from this package and feed its constructor with a clien
 import TwitchHelix from "twitch-helix"
 // Or: const TwitchHelix = require("twitch-helix")
 
-const twitchClient = new TwitchHelix({
+const twitchApi = new TwitchHelix({
     clientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     clientSecret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 })
 
-twitchClient.getTwitchUserByName("nightbot").then(twitchUser => {
+twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
     console.log(twitchUser.display_name) // Prints "Nightbot"
 })
 ```

@@ -13,7 +13,7 @@
     "homepage": "https://github.com/jaid/jaid-web#readme",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jaid/deepbot-simulator"
+        "url": "https://github.com/jaid/twitch-helix"
     },
     "description": "Little helper class for the new Twitch Helix API",
     "engines": {

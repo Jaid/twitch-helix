@@ -2,7 +2,7 @@ import EventEmitter from "events"
 import lodash from "lodash"
 import request from "request"
 
-export default class TwitchHelix {
+module.exports = class TwitchHelix {
 
     constructor(options) {
         if (lodash.isEmpty(options)) {

@@ -18,8 +18,8 @@
             "comments": false,
             "presets": [
                 [
-                    "minify",
                     // https://github.com/babel/minify/tree/master/packages/babel-preset-minify#options
+                    "minify",
                     {
                         // https://github.com/babel/minify/issues/556
                         "mangle": false,

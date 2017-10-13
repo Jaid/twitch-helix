@@ -13,3 +13,6 @@
 
 # Compiled with Babel
 /src/**/*.js
+
+# dotenv
+/.env

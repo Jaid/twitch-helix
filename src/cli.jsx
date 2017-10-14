@@ -16,6 +16,7 @@ program
     .usage("[options] <api-query>")
     .option("-c, --client-id [value]", "Twitch application client ID", process.env.TWITCH_CLIENT_ID)
     .option("-s, --client-secret [value]", "Twitch application client secret", process.env.TWITCH_CLIENT_SECRET)
+    .option("--kraken", "Using the Kraken endpoint instead of the Helix endpoint")
     .parse(process.argv)
 
 if (!program.args[0]) {
@@ -30,7 +31,15 @@ const twitchApi = new TwitchHelix({
     clientSecret: program.clientSecret
 })
 
-twitchApi.sendApiRequest(query)
+twitchApi.on("log-info", winston.info)
+twitchApi.on("log-warn", winston.warn)
+twitchApi.on("log-error", winston.error)
+
+const queryOptions = {
+    api: program.kraken ? "kraken" : "helix"
+}
+
+twitchApi.sendApiRequest(query, queryOptions)
     .then(({response, body}) => {
         const rateLimit = response.headers["ratelimit-limit"]
         const rateLimitRemaining = response.headers["ratelimit-remaining"]

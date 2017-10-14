@@ -24,18 +24,6 @@ module.exports = class TwitchHelix {
         this.eventEmitter = new EventEmitter()
     }
 
-    updateApiRequest = () => {
-        this.apiRequest = request.defaults({
-            baseUrl: "https://api.twitch.tv/helix",
-            jar: true,
-            json: true,
-            gzip: true,
-            headers: {
-                Authorization: `Bearer ${this.accessToken}`
-            }
-        })
-    }
-
     on = (type, handler) => {
         this.eventEmitter.on(type, handler)
     }
@@ -61,7 +49,6 @@ module.exports = class TwitchHelix {
             this.accessToken = body.access_token
             this.refreshToken = body.refresh_token
             this.tokenExpiration = Date.now() + (body.expires_in * 1000)
-            this.updateApiRequest()
             resolve(this.tokenExpiration)
         })
     })
@@ -74,20 +61,47 @@ module.exports = class TwitchHelix {
         }
     }
 
-    getApiData = async query => {
+    sendHelixRequest = async query => {
         const apiResponse = await this.sendApiRequest(query)
         return apiResponse.body.data
     }
 
-    sendApiRequest = query => new Promise(async (resolve, reject) => {
+    sendApiRequest = (query, options = {}) => new Promise(async (resolve, reject) => {
+        const {
+            api = "helix"
+        } = options
         await this.autoAuthorize()
-        this.apiRequest.get(query, (error, response, body) => {
-            this.log("info", `${response.request.method} ${response.request.href}`)
+        let queryOptions = {
+            json: true,
+            gzip: true
+        }
+        if (api === "helix") {
+            queryOptions = Object.assign(queryOptions, {
+                baseUrl: "https://api.twitch.tv/helix",
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`
+                }
+            })
+        } else if (api === "kraken") {
+            queryOptions = Object.assign(queryOptions, {
+                baseUrl: "https://api.twitch.tv/kraken",
+                headers: {
+                    Authorization: `OAuth ${this.accessToken}`,
+                    Accept: "application/vnd.twitchtv.v5+json"
+                }
+            })
+        } else {
+            throw new Error(`Unknown Twitch API ${api}`)
+        }
+        request.get(query, queryOptions, (error, response, body) => {
+            if (response && response.request) {
+                this.log("info", `${response.request.method} ${response.request.href}`)
+            }
             if (error) {
                 reject(error)
                 return
             }
-            if (!body || body.error || !body.data) {
+            if (!body || body.error) {
                 const errorMessage = `Got an unexpected response body from Twitch API: ${typeof body === "object" ? JSON.stringify(body) : body}`
                 this.log("error", errorMessage)
                 reject(errorMessage)
@@ -97,9 +111,8 @@ module.exports = class TwitchHelix {
         })
     })
 
-
     getTwitchUserByName = async username => {
-        const data = await this.getApiData(`users?login=${username}`)
+        const data = await this.sendHelixRequest(`users?login=${username}`)
         return data[0]
     }
 
@@ -111,7 +124,7 @@ module.exports = class TwitchHelix {
             this.log("warn", `Tried to retrieve data from Twitch API for more ${usernames.length} usernames at once! Using the first 100 usernames and discarding ${usernames.length - 100} usernames`)
             usernames.length = 100
         }
-        const data = await this.getApiData("users?login=" + usernames.join("&login="))
+        const data = await this.sendHelixRequest("users?login=" + usernames.join("&login="))
         return data
     }
 

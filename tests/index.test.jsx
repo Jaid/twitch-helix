@@ -21,14 +21,14 @@ test("TwitchHelix functions should return legit values", async () => {
     expect(j4idn.profile_image_url).toMatch("https://")
     expect(j4idn.view_count).toBeGreaterThan(0)
 
-    const bots = await twitchApi.getTwitchUsersByName(["moobot", "nightbot"])
-    expect(bots).toHaveLength(2)
-    const moobot = bots.find(twitchUser => twitchUser.login === "moobot")
-    const nightbot = bots.find(twitchUser => twitchUser.login === "nightbot")
-    expect(moobot.id).toBe("1564983")
-    expect(nightbot.id).toBe("19264788")
+    const twitchUsers = await twitchApi.getTwitchUsersByName(["gronkh", "xpandorya"])
+    expect(twitchUsers).toHaveLength(2)
+    const [gronkh, pandorya] = twitchUsers // Guessing that getTwitchUsersByName returns array values in the same order as its argument (not confirmed)
+    expect(gronkh.id).toBe("12875057")
+    expect(pandorya.id).toBe("35893764")
 
-    await twitchApi.sendApiRequest("https://api.twitch.tv/helix/users?login=nightbot")
+    const followDate = await twitchApi.getFollowDate(gronkh.id, pandorya.id)
+    expect(followDate.getFullYear()).toBe(2014) // Bravely assuming that xPandorya never unfollows Gronkh
 
 })
 

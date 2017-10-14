@@ -44,7 +44,7 @@ twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
 
 Here is an example:
 ```bash
-node_modules/.bin/twitch-helix --client-id xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx --client-secret xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx "users?login=nightbot"
+node_modules/.bin/twitch-helix --client-id xxx --client-secret xxx "users?login=nightbot"
 ``` 
 
 This will print:

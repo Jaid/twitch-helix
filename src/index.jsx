@@ -103,7 +103,7 @@ module.exports = class TwitchHelix {
     }
 
     async getTwitchUserByName(username) {
-        const data = await this.sendApiRequest(`users?login=${username}`)
+        const data = await this.getApiData(`users?login=${username}`)
         return data[0]
     }
 
@@ -115,7 +115,7 @@ module.exports = class TwitchHelix {
             this.log("warn", `Tried to retrieve data from Twitch API for more ${usernames.length} usernames at once! Using the first 100 usernames and discarding ${usernames.length} usernames`)
             usernames.length = 100
         }
-        const data = await this.sendApiRequest("users?login=" + usernames.join("&login="))
+        const data = await this.getApiData("users?login=" + usernames.join("&login="))
         return data
     }
 

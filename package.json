@@ -56,5 +56,5 @@
     ],
     "main": "src/index.js",
     "bin": "src/cli.js",
-    "runkitExampleFilename": "runkit_example.js"
+    "runkitExampleFilename": "example.js"
 }

@@ -24,7 +24,7 @@ module.exports = class TwitchHelix {
         this.eventEmitter = new EventEmitter()
     }
 
-    updateApiRequest() {
+    updateApiRequest = () => {
         this.apiRequest = request.defaults({
             baseUrl: "https://api.twitch.tv/helix",
             jar: true,
@@ -36,79 +36,74 @@ module.exports = class TwitchHelix {
         })
     }
 
-    on(type, handler) {
+    on = (type, handler) => {
         this.eventEmitter.on(type, handler)
     }
 
-    log(level, message) {
+    log = (level, message) => {
         this.eventEmitter.emit("log-" + level, message)
     }
 
-    authorize() {
-        return new Promise((resolve, reject) => {
-            request.post("https://api.twitch.tv/kraken/oauth2/token", {
-                qs: {
-                    client_id: this.options.clientId,
-                    client_secret: this.options.clientSecret,
-                    grant_type: "client_credentials"
-                },
-                gzip: true,
-                json: true
-            }, (error, response, body) => {
-                if (error) {
-                    reject(error)
-                    return
-                }
-                this.accessToken = body.access_token
-                this.refreshToken = body.refresh_token
-                this.tokenExpiration = Date.now() + (body.expires_in * 1000)
-                this.updateApiRequest()
-                resolve(this.tokenExpiration)
-            })
+    authorize = () => new Promise((resolve, reject) => {
+        request.post("https://api.twitch.tv/kraken/oauth2/token", {
+            qs: {
+                client_id: this.options.clientId,
+                client_secret: this.options.clientSecret,
+                grant_type: "client_credentials"
+            },
+            gzip: true,
+            json: true
+        }, (error, response, body) => {
+            if (error) {
+                reject(error)
+                return
+            }
+            this.accessToken = body.access_token
+            this.refreshToken = body.refresh_token
+            this.tokenExpiration = Date.now() + (body.expires_in * 1000)
+            this.updateApiRequest()
+            resolve(this.tokenExpiration)
         })
-    }
+    })
 
-    isAuthorized() {
-        return this.accessToken && (Date.now() - this.options.prematureExpirationTime > this.tokenExpiration)
-    }
+    isAuthorized = () => this.accessToken && (Date.now() - this.options.prematureExpirationTime > this.tokenExpiration)
 
-    async autoAuthorize() {
+    autoAuthorize = async () => {
         if (!this.isAuthorized() && this.options.autoAuthorize) {
             await this.authorize()
         }
     }
 
-    async getApiData(query) {
+    getApiData = async query => {
         const apiResponse = await this.sendApiRequest(query)
         return apiResponse.body.data
     }
 
-    sendApiRequest(query) {
-        return new Promise(async (resolve, reject) => {
-            await this.autoAuthorize()
-            this.apiRequest.get(query, (error, response, body) => {
-                this.log("info", `${response.request.method} ${response.request.href}`)
-                if (error) {
-                    reject(error)
-                    return
-                }
-                if (!body || body.error || !body.data) {
-                    const errorMessage = `Got an unexpected response body from Twitch API: ${typeof body === "object" ? JSON.stringify(body) : body}`
-                    this.log("error", errorMessage)
-                    reject(errorMessage)
-                    return
-                }
-                resolve({response, body})
-            })
+    sendApiRequest = query => new Promise(async (resolve, reject) => {
+        await this.autoAuthorize()
+        this.apiRequest.get(query, (error, response, body) => {
+            this.log("info", `${response.request.method} ${response.request.href}`)
+            if (error) {
+                reject(error)
+                return
+            }
+            if (!body || body.error || !body.data) {
+                const errorMessage = `Got an unexpected response body from Twitch API: ${typeof body === "object" ? JSON.stringify(body) : body}`
+                this.log("error", errorMessage)
+                reject(errorMessage)
+                return
+            }
+            resolve({response, body})
         })
-    }
+    })
 
-    async getTwitchUserByName(username) {
+
+    getTwitchUserByName = async username => {
         const data = await this.getApiData(`users?login=${username}`)
         return data[0]
     }
 
-    async getTwitchUsersByName(usernames) {
+    getTwitchUsersByName = async usernames => {
         if (!usernames || lodash.isEmpty(usernames)) {
             return []
         }

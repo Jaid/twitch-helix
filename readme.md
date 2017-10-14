@@ -22,7 +22,7 @@ Yarn
 yarn add twitch-helix
 ```
 
-## Libary Usage
+## Library Usage
 
 Import the default class from this package and feed its constructor with a client ID and a client secret. You can generate those in your [Twitch Developers Dashboard](https://dev.twitch.tv/dashboard/apps).
 

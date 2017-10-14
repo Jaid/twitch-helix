@@ -87,6 +87,7 @@ module.exports = class TwitchHelix {
         return new Promise(async (resolve, reject) => {
             await this.autoAuthorize()
             this.apiRequest.get(query, (error, response, body) => {
+                this.log("info", `${response.request.method} ${response.request.href}`)
                 if (error) {
                     reject(error)
                     return
@@ -108,11 +109,11 @@ module.exports = class TwitchHelix {
     }
 
     async getTwitchUsersByName(usernames) {
-        if (!usernames || !usernames.length) {
+        if (!usernames || lodash.isEmpty(usernames)) {
             return []
         }
         if (usernames.length > 100) {
-            this.log("warn", `Tried to retrieve data from Twitch API for more ${usernames.length} usernames at once! Using the first 100 usernames and discarding ${usernames.length} usernames`)
+            this.log("warn", `Tried to retrieve data from Twitch API for more ${usernames.length} usernames at once! Using the first 100 usernames and discarding ${usernames.length - 100} usernames`)
             usernames.length = 100
         }
         const data = await this.getApiData("users?login=" + usernames.join("&login="))

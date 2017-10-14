@@ -4,7 +4,11 @@ import prettyJson from "prettyjson"
 import winston from "winston"
 import TwitchHelix from "./index"
 
-require("dotenv").config()
+try {
+    require("dotenv").config()
+} catch (error) {
+}
+
 winston.cli()
 
 program
@@ -34,4 +38,7 @@ twitchApi.sendApiRequest(query)
         const statusLine = `${response.statusCode} ${response.statusMessage} (${rateLimitRemaining}/${rateLimit} requests remaining for ${ Math.ceil(rateLimitReset - Date.now() / 1000)} seconds)`
         winston.info(statusLine + "\n" + prettyJson.render(body))
     })
-    .catch(error => winston.error(error instanceof Error ? error.stack : new Error(error).stack))
+    .catch(error => {
+        winston.error(error instanceof Error ? error.stack : new Error(error).stack)
+        process.exit(1)
+    })

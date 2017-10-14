@@ -128,4 +128,19 @@ module.exports = class TwitchHelix {
         return data
     }
 
+    getStreamInfoById = async id => {
+        const data = await this.sendHelixRequest(`streams?user_id=${id}`)
+        return data[0] ? data[0] : null
+    }
+
+    getStreamInfoByUsername = async username => {
+        const data = await this.sendHelixRequest(`streams?user_login=${username}`)
+        return data[0] ? data[0] : null
+    }
+
+    getFollowDate = async (streamer_id, follower_id) => {
+        const data = await this.sendHelixRequest(`users/follows?to_id=${streamer_id}&from_id=${follower_id}`)
+        return data[0] ? new Date(data[0].followed_at) : null
+    }
+
 }

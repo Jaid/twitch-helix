@@ -24,7 +24,7 @@ yarn add twitch-helix
 
 ## Library Usage
 
-Import the default class from this package and feed its constructor with a client ID and a client secret. You can generate those in your [Twitch Developers Dashboard](https://dev.twitch.tv/dashboard/apps).
+Import the default class from this package and feed its constructor with a client ID and a client secret. You can generate those in your [Twitch Developers Dashboard](https://dev.twitch.tv/dashboard/apps).<br>
 Try it out on [RunKit](https://npm.runkit.com/twitch-helix)!
 
 ```jsx

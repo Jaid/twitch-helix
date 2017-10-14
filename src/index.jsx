@@ -78,6 +78,11 @@ module.exports = class TwitchHelix {
         }
     }
 
+    async getApiData(query) {
+        const apiResponse = await this.sendApiRequest()
+        return apiResponse.body.data
+    }
+
     sendApiRequest(query) {
         return new Promise(async (resolve, reject) => {
             await this.autoAuthorize()
@@ -86,19 +91,13 @@ module.exports = class TwitchHelix {
                     reject(error)
                     return
                 }
-                if (!body) {
-                    const errorMessage = `Got an invalid response body from Twitch API: ${body}`
+                if (!body || body.error || !body.data) {
+                    const errorMessage = `Got an unexpected response body from Twitch API: ${typeof body === "object" ? JSON.stringify(body) : body}`
                     this.log("error", errorMessage)
                     reject(errorMessage)
                     return
                 }
-                if (!body.data) {
-                    const errorMessage = `Got invalid response data from Twitch API: ${body}`
-                    this.log("error", errorMessage)
-                    reject(errorMessage)
-                    return
-                }
-                resolve(body.data)
+                resolve({response, body})
             })
         })
     }

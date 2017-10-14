@@ -21,8 +21,11 @@
     },
     "dependencies": {
         "babel-runtime": "^6.26.0",
+        "commander": "^2.11.0",
         "lodash": "^4.17.4",
-        "request": "^2.83.0"
+        "prettyjson": "^1.2.1",
+        "request": "^2.83.0",
+        "winston": "^2.4.0"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -51,5 +54,6 @@
     "files": [
         "src/**/*.js"
     ],
-    "main": "src/index.js"
+    "main": "src/index.js",
+    "bin": "src/cli.js"
 }

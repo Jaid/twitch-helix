@@ -4,3 +4,4 @@ node_js:
 cache: yarn
 script:
   - yarn test-prod
+  - node src/cli.js users?login=nightbot

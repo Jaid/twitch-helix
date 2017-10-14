@@ -79,7 +79,7 @@ module.exports = class TwitchHelix {
     }
 
     async getApiData(query) {
-        const apiResponse = await this.sendApiRequest()
+        const apiResponse = await this.sendApiRequest(query)
         return apiResponse.body.data
     }
 

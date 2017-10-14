@@ -8,5 +8,7 @@ const twitchApi = new TwitchHelix({
     clientSecret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 })
 
+twitchApi.on("log-info", console.log)
+
 const twitchUser = await twitchApi.getTwitchUserByName("nightbot")
-console.log(twitchUser.display_name)
+console.log(`Twitch user ${twitchUser.display_name} with ID ${twitchUser.id} has ${twitchUser.view_count} views!`)

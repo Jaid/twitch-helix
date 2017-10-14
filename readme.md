@@ -22,7 +22,7 @@ Yarn
 yarn add twitch-helix
 ```
 
-## Usage
+## Libary Usage
 
 Import the default class from this package and feed its constructor with a client ID and a client secret. You can generate those in your [Twitch Developers Dashboard](https://dev.twitch.tv/dashboard/apps).
 
@@ -38,4 +38,27 @@ const twitchApi = new TwitchHelix({
 twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
     console.log(twitchUser.display_name) // Prints "Nightbot"
 })
+```
+
+## Command Line Usage
+
+Here is an example:
+```bash
+node_modules/.bin/twitch-helix --client-id xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx --client-secret xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx users?login=nightbot
+``` 
+
+This will print:
+```
+info:    200 OK (119/120 requests remaining for 56 seconds)
+data: 
+  - 
+    id:                19264788
+    login:             nightbot
+    display_name:      Nightbot
+    type:              
+    broadcaster_type:  partner
+    description:       A chat moderator bot for Twitch. Visit https://nightbot.tv for more info.
+    profile_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/nightbot-profile_image-2345338c09b4d468-300x300.png
+    offline_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/nightbot-channel_offline_image-71fd41fb8f4b34a3-1920x1080.png
+    view_count:        799442
 ```

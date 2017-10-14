@@ -8,6 +8,5 @@ const twitchApi = new TwitchHelix({
     clientSecret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 })
 
-twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
-    console.log(twitchUser.display_name)
-})
+const twitchUser = await twitchApi.getTwitchUserByName("nightbot")
+console.log(twitchUser.display_name)

@@ -50,7 +50,7 @@
         "clean": "./node_modules/.bin/gulp clean",
         "build-prod": "NODE_ENV=production ./node_modules/.bin/gulp babel",
         "build-dev": "./node_modules/.bin/gulp babel",
-        "bump-and-publish": "node -r chalk -e 'const chalk = require(\"chalk\");console.log(`${chalk.red(\"Run\")} ${chalk.yellow(\"node_modules/.bin/np\")} ${chalk.red(\"in console. See https://github.com/sindresorhus/np/issues/143\")}`)'"
+        "bump-and-publish": "node_modules/.bin/np"
     },
     "files": [
         "src/**/*.js",

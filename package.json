@@ -25,6 +25,7 @@
         "lodash": "^4.17.4",
         "prettyjson": "^1.2.1",
         "request": "^2.83.0",
+        "requestretry": "^1.12.2",
         "winston": "^2.4.0"
     },
     "devDependencies": {

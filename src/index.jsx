@@ -1,6 +1,6 @@
 import EventEmitter from "events"
 import lodash from "lodash"
-import request from "request"
+import request from "requestretry"
 
 module.exports = class TwitchHelix {
 
@@ -16,7 +16,8 @@ module.exports = class TwitchHelix {
         }
         this.options = Object.assign(options, {
             prematureExpirationTime: 10000,
-            autoAuthorize: true
+            autoAuthorize: true,
+            smartRetry: true
         })
         this.accessToken = null
         this.refreshToken = null
@@ -61,6 +62,15 @@ module.exports = class TwitchHelix {
         }
     }
 
+    shouldRetryRequest = (error, response, body) => {
+        const retryErrors = ["Bad Request"]
+        if (request.RetryStrategies.HTTPOrNetworkError(error, response) || retryErrors.includes(body.error)) {
+            this.log("warn", `Retry #${response.attempts} ${response.request.href}`)
+            return true
+        }
+        return false
+    }
+
     sendHelixRequest = async query => {
         const apiResponse = await this.sendApiRequest(query)
         return apiResponse.body.data
@@ -92,6 +102,13 @@ module.exports = class TwitchHelix {
             })
         } else {
             throw new Error(`Unknown Twitch API ${api}`)
+        }
+        if (this.options.smartRetry) {
+            queryOptions = Object.assign(queryOptions, {
+                maxAttempts: 10,
+                delayStrategy: function () {return (this.attempts ** 2) * 200}, // 200 ms, 800 ms, 1800 ms, 3200 ms, 5000 ms, ...
+                retryStrategy: this.shouldRetryRequest
+            })
         }
         request.get(query, queryOptions, (error, response, body) => {
             if (response && response.request) {

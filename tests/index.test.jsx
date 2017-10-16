@@ -8,6 +8,10 @@ const clientSecret = process.env.TWITCH_CLIENT_SECRET
 test("TwitchHelix functions should return legit values", async () => {
 
     const twitchApi = new TwitchHelix({clientId, clientSecret})
+
+    twitchApi.on("log-warn", console.log)
+    twitchApi.on("log-error", console.error)
+
     expect(typeof twitchApi).toBe("object")
     const tokenExpiration = await twitchApi.authorize()
     expect(tokenExpiration).toBeGreaterThan(Date.now())

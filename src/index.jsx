@@ -63,17 +63,20 @@ module.exports = class TwitchHelix {
     }
 
     shouldRetryRequest = (error, response, body) => {
-        if (request.RetryStrategies.HTTPOrNetworkError(error, response)) {
-            const reason = response.statusCode ? `${response.statusCode} ${response.statusMessage}` : (error.message || error)
+        const getRetryReason = (error, response, body) => {
+            if (request.RetryStrategies.HTTPOrNetworkError(error, response)) {
+                return response.statusCode ? `${response.statusCode} ${response.statusMessage}` : (error.message || error)
+            }
+            if (!body) {
+                return "Received no response body"
+            }
+            if (["Bad Request"].includes(body.error)) {
+                return body.error
+            }
+        }
+        const reason = getRetryReason(error, response, body)
+        if (reason) {
             this.log("warn", `Retry #${response.attempts} ${response.request.href} (${reason})`)
-            return true
-        }
-        if (!body) {
-            this.log("warn", `Retry #${response.attempts} ${response.request.href} (Received no response body)`)
-            return true
-        }
-        if (["Bad Request"].includes(body.error)) {
-            this.log("warn", `Retry #${response.attempts} ${response.request.href} (${body.error})`)
             return true
         }
         return false

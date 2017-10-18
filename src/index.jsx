@@ -148,12 +148,12 @@ module.exports = class TwitchHelix {
         if (!usernames || lodash.isEmpty(usernames)) {
             return []
         }
-        const twitchUsers = []
+        const queryPromises = []
         for (const usernamesChunk of lodash.chunk(usernames, 100)) { // /users endpoint has a cap of 100, so we split the query into chunks
-            const twitchUsersChunk = await this.sendHelixRequest("users?login=" + usernamesChunk.join("&login="))
-            twitchUsers.push(...twitchUsersChunk)
+            queryPromises.push(this.sendHelixRequest("users?login=" + usernamesChunk.join("&login=")))
         }
-        return twitchUsers
+        const twitchUsers = await Promise.all(queryPromises)
+        return lodash.flatten(twitchUsers)
     }
 
     getStreamInfoById = async id => {

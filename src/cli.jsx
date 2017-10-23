@@ -44,7 +44,7 @@ twitchApi.sendApiRequest(query, queryOptions)
         const rateLimit = response.headers["ratelimit-limit"]
         const rateLimitRemaining = response.headers["ratelimit-remaining"]
         const rateLimitReset = response.headers["ratelimit-reset"]
-        const statusLine = `${response.statusCode} ${response.statusMessage} (${rateLimitRemaining}/${rateLimit} requests remaining for ${ Math.ceil(rateLimitReset - Date.now() / 1000)} seconds)`
+        const statusLine = `${response.statusCode} ${response.statusMessage} (${rateLimitRemaining}/${rateLimit} requests remaining for ${Math.ceil(rateLimitReset - Date.now() / 1000)} seconds)`
         winston.info(statusLine + "\n" + prettyJson.render(body))
     })
     .catch(error => {

@@ -24,6 +24,8 @@ yarn add twitch-helix
 
 ## Library Usage
 
+#### Example
+
 Import the default class from this package and feed its constructor with a client ID and a client secret. You can generate those in your [Twitch Developers Dashboard](https://dev.twitch.tv/dashboard/apps).<br>
 Try it out on [RunKit](https://npm.runkit.com/twitch-helix)!
 
@@ -39,6 +41,44 @@ const twitchApi = new TwitchHelix({
 twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
     console.log(twitchUser.display_name) // Prints "Nightbot"
 })
+```
+
+#### Construction
+
+TwitchHelix is a class and you need to create an instance with:
+
+```
+new TwitchHelix(options)
+```
+
+The options parameter is an object and can have following fields:
+
+|Field|Default value
+|---|---|
+|clientId|:no_entry_sign: (required)
+|clientSecret|:no_entry_sign: (required)
+|prematureExpirationTime|10000
+|autoAuthorize|true
+|smartRetry|true
+
+#### Implemented queries
+
+Some of the common queries are wrapped into neat functions. Those are:
+
+- Promise `getTwitchUserByName(username: string)` returns a Twitch user info object (as shown in above example)
+- Promise `getTwitchUsersByName(usernames: Array<string>)` returns an array of Twitch user info objects
+- Promise `getStreamInfoById(id: string)` returns a Twitch stream object if user is currently streaming or `null` otherwise
+- Promise `getStreamInfoByUsername(username: string)` returns a Twitch stream object if user is currently streaming or `null` otherwise
+- Promise `getFollowDate(streamerId: string, followerId: string)` returns a `Date` if follower follows streamer or `null` otherwise
+
+#### Custom queries
+
+You may need custom queries for retrieving data that is not wrapped into a function yet. Feel free to do so.<br>
+Some API endpoints are still not implemented by Twitch in Helix API, so you can also use [Kraken v5 API](https://dev.twitch.tv/docs/v5).
+
+```
+const helixQueryData = twitchApi.sendHelixRequest("users?login=nightbot&login=moobot")
+const krakenQueryData = twitchApi.sendApiRequest("users?login=nightbot,moobot", {api: "kraken"})
 ```
 
 ## Command Line Usage

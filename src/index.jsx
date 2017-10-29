@@ -9,12 +9,14 @@ module.exports = class TwitchHelix {
             throw new Error("TwitchHelix constructor needs options object as first argument")
         }
         const credentialOptions = ["clientId", "clientSecret"]
-        for (const requiredOption of credentialOptions) { // Ensure credentials are set
+        // Ensure credentials are set
+        for (const requiredOption of credentialOptions) {
             if (!options[requiredOption]) {
                 throw new Error(`Required TwitchHelix option ${requiredOption} is ${options[requiredOption]}`)
             }
         }
-        for (const requiredOption of credentialOptions) { // Ensure credentials are not "xxx"
+        // Ensure credentials are not "xxx"
+        for (const requiredOption of credentialOptions) {
             if (options[requiredOption].match(/^x+$/i)) {
                 throw new Error(`Option ${requiredOption} is ${options[requiredOption]} which looks like a placeholder value (You can generate real credential values in your Twitch Developers Dashboard)`)
             }
@@ -25,7 +27,7 @@ module.exports = class TwitchHelix {
             smartRetry: true
         })
         this.accessToken = null
-        this.refreshToken = null
+        this.refreshToken = null // TODO Implement autoRefresh
         this.tokenExpiration = null
         this.eventEmitter = new EventEmitter()
     }

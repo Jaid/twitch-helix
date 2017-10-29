@@ -13,7 +13,7 @@ beforeAll(() => {
     twitchApi.on("log-error", console.error)
 })
 
-test("twitchApi valid", async () => {
+test("TwitchHelix construction and authorize() working", async () => {
     expect(typeof twitchApi).toBe("object")
     const tokenExpiration = await twitchApi.authorize()
     expect(tokenExpiration).toBeGreaterThan(Date.now())
@@ -44,7 +44,15 @@ test("getFollowDate", async () => {
     expect(followDate.getFullYear()).toBe(2014) // Bravely assuming that xPandorya never unfollows Gronkh
 })
 
+test("getStreamInfo*", async () => {
+    const offlineStreamInfoById = await twitchApi.getStreamInfoById("19264788") // Nightbot (I hope that Night never starts streaming on this account)
+    expect(offlineStreamInfoById).toBeNull()
+    const offlineStreamInfoByUsername = await twitchApi.getStreamInfoByUsername("nightbot") // Nightbot (I hope that Night never starts streaming on this account)
+    expect(offlineStreamInfoByUsername).toBeNull()
+})
+
 test("TwitchHelix should throw an Error if incorrectly constructed", () => {
     expect(() => new TwitchHelix()).toThrow("needs options object")
     expect(() => new TwitchHelix({clientId}).toThrow("TwitchHelix option clientSecret"))
+    expect(() => new TwitchHelix({clientId, clientSecret: "xxx"}).toThrow("Option clientSecret is xxx which looks like a placeholder value"))
 })

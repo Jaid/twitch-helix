@@ -65,7 +65,7 @@ module.exports = class TwitchHelix {
     shouldRetryRequest = (error, response, body) => {
         const getRetryReason = (error, response, body) => {
             if (request.RetryStrategies.HTTPOrNetworkError(error, response)) {
-                return response.statusCode ? `${response.statusCode} ${response.statusMessage}` : (error.message || error)
+                return response && response.statusCode ? `${response.statusCode} ${response.statusMessage}` : (error.message || error)
             }
             if (!body) {
                 return "Received no response body"

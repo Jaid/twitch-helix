@@ -22,11 +22,13 @@ module.exports = class TwitchHelix extends EventEmitter {
                 throw new Error(`Option ${requiredOption} is ${options[requiredOption]} which looks like a placeholder value (You can generate real credential values in your Twitch Developers Dashboard)`)
             }
         }
-        this.options = Object.assign(options, {
+        // Setting default options
+        this.options = {
             prematureExpirationTime: 10000,
             autoAuthorize: true,
-            smartRetry: true
-        })
+            smartRetry: true,
+            ...options
+        }
         this.accessToken = null
         this.refreshToken = null // TODO Implement autoRefresh
         this.tokenExpiration = null

@@ -21,6 +21,9 @@ test("TwitchHelix construction and authorize() working", async () => {
 
 test("getTwitchUser*", async () => {
 
+    let loggingEventCalls = 0
+    twitchApi.on("log-info", () => loggingEventCalls++)
+
     const j4idn = await twitchApi.getTwitchUserByName("j4idn")
     expect(j4idn.description).toMatch("")
     expect(j4idn.display_name).toMatch("")
@@ -36,6 +39,8 @@ test("getTwitchUser*", async () => {
     expect(gronkh.id).toBe("12875057")
     expect(pandorya.id).toBe("35893764")
 
+    expect(loggingEventCalls).toBeGreaterThanOrEqual(2)
+
 })
 
 test("getFollowDate", async () => {
@@ -47,7 +52,7 @@ test("getFollowDate", async () => {
 test("getStreamInfo*", async () => {
     const offlineStreamInfoById = await twitchApi.getStreamInfoById("19264788") // Nightbot (I hope that Night never starts streaming on this account)
     expect(offlineStreamInfoById).toBeNull()
-    const offlineStreamInfoByUsername = await twitchApi.getStreamInfoByUsername("nightbot") // Nightbot (I hope that Night never starts streaming on this account)
+    const offlineStreamInfoByUsername = await twitchApi.getStreamInfoByUsername("nightbot")
     expect(offlineStreamInfoByUsername).toBeNull()
 })
 

@@ -2,9 +2,10 @@ import EventEmitter from "events"
 import lodash from "lodash"
 import request from "requestretry"
 
-module.exports = class TwitchHelix {
+module.exports = class TwitchHelix extends EventEmitter {
 
     constructor(options) {
+        super()
         if (lodash.isEmpty(options)) {
             throw new Error("TwitchHelix constructor needs options object as first argument")
         }
@@ -29,15 +30,10 @@ module.exports = class TwitchHelix {
         this.accessToken = null
         this.refreshToken = null // TODO Implement autoRefresh
         this.tokenExpiration = null
-        this.eventEmitter = new EventEmitter()
-    }
-
-    on = (type, handler) => {
-        this.eventEmitter.on(type, handler)
     }
 
     log = (level, message) => {
-        this.eventEmitter.emit("log-" + level, message)
+        this.emit("log-" + level, message)
     }
 
     authorize = () => new Promise((resolve, reject) => {

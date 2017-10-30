@@ -47,19 +47,19 @@ twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
 
 TwitchHelix is a class and you need to create an instance with:
 
-```
+```jsx
 new TwitchHelix(options)
 ```
 
 The options parameter is an object and can have following fields:
 
-|Field|Default value
-|---|---|
-|clientId|:no_entry_sign: (required)
-|clientSecret|:no_entry_sign: (required)
-|prematureExpirationTime|10000
-|autoAuthorize|true
-|smartRetry|true
+Field|Info|Default value
+---|---|---
+`clientId`|Client ID of your Twitch app|:no_entry_sign: (required)
+`clientSecret`|Client secret of your Twitch app|:no_entry_sign: (required)
+`prematureExpirationTime`|Time in ms for the access token to expire before it is meant to|`10000`
+`autoAuthorize`|Will call automatically call authorize() when needed|`true`
+`smartRetry`|Will retry Twitch API requests up to 10 times if the server response is invalid|`true`
 
 #### Implemented queries
 
@@ -73,13 +73,25 @@ Some of the common queries are wrapped into neat functions. Those are:
 
 #### Custom queries
 
-You may need custom queries for retrieving data that is not wrapped into a function yet. Feel free to do so.<br>
-Some API endpoints are still not implemented by Twitch in Helix API, so you can also use [Kraken v5 API](https://dev.twitch.tv/docs/v5).
+You may need custom queries for retrieving data that is not wrapped into a function yet. Feel free to do so. Some API endpoints are still not implemented by Twitch in Helix API, so you can also use [Kraken v5 API](https://dev.twitch.tv/docs/v5).
 
-```
+```jsx
 const helixQueryData = twitchApi.sendHelixRequest("users?login=nightbot&login=moobot")
 const krakenQueryData = twitchApi.sendApiRequest("users?login=nightbot,moobot", {api: "kraken"})
 ```
+
+#### Events
+
+You can listen to some events.
+```jsx
+twitchApi.on(eventName, eventHandler)
+```
+
+Event name|Parameters|Description
+---|---|---
+`log-info`|`message`|Emitted on INFO log messages
+`log-warn`|`message`|Emitted on WARN log messages
+`log-error`|`message`|Emitted on ERROR log messages
 
 ## Command Line Usage
 
@@ -89,17 +101,4 @@ node_modules/.bin/twitch-helix --client-id xxx --client-secret xxx "users?login=
 ``` 
 
 This will print:
-```
-info:    200 OK (119/120 requests remaining for 56 seconds)
-data: 
-  - 
-    id:                19264788
-    login:             nightbot
-    display_name:      Nightbot
-    type:              
-    broadcaster_type:  partner
-    description:       A chat moderator bot for Twitch. Visit https://nightbot.tv for more info.
-    profile_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/nightbot-profile_image-2345338c09b4d468-300x300.png
-    offline_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/nightbot-channel_offline_image-71fd41fb8f4b34a3-1920x1080.png
-    view_count:        799442
-```
+[![Command Line Output](https://i.imgur.com/PTdBOQW.png)](https://i.imgur.com/PTdBOQW.png)

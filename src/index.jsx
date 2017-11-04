@@ -81,7 +81,8 @@ module.exports = class TwitchHelix extends EventEmitter {
         }
         const reason = getRetryReason(error, response, body)
         if (reason) {
-            this.log("warn", `Retry #${response.attempts} ${response.request.href} (${reason})`)
+            const retryDescription = response ? `#${response.attempts} ${response.request.href}` : response
+            this.log("warn", `Retry ${retryDescription} (${reason})`)
             return true
         }
         return false

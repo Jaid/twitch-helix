@@ -48,7 +48,7 @@ twitchApi.getTwitchUserByName("nightbot").then(twitchUser => {
 TwitchHelix is a class and you need to create an instance with:
 
 ```jsx
-new TwitchHelix(options)
+const twitchApi = new TwitchHelix(options)
 ```
 
 The options parameter is an object and can have following fields:
@@ -76,8 +76,8 @@ Some of the common queries are wrapped into neat functions. Those are:
 You may need custom queries for retrieving data that is not wrapped into a function yet. Feel free to do so. Some API endpoints are still not implemented by Twitch in Helix API, so you can also use [Kraken v5 API](https://dev.twitch.tv/docs/v5).
 
 ```jsx
-const helixQueryData = twitchApi.sendHelixRequest("users?login=nightbot&login=moobot")
-const krakenQueryData = twitchApi.sendApiRequest("users?login=nightbot,moobot", {api: "kraken"})
+const helixQueryData = await twitchApi.sendHelixRequest("users?login=nightbot&login=moobot")
+const krakenQueryData = await twitchApi.sendApiRequest("users?login=nightbot,moobot", {api: "kraken"})
 ```
 
 #### Events

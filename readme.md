@@ -12,14 +12,14 @@ Feel free to contribute by creating [issues](https://github.com/Jaid/twitch-heli
 
 ## Installation
 
-npm
-```bash
-npm install twitch-helix
-```
-
-Yarn
+Yarn (recommended)
 ```bash
 yarn add twitch-helix
+```
+
+npm
+```bash
+npm install --save twitch-helix
 ```
 
 ## Library Usage
@@ -57,7 +57,7 @@ Field|Info|Default value
 ---|---|---
 `clientId`|Client ID of your Twitch app|:no_entry_sign: (required)
 `clientSecret`|Client secret of your Twitch app|:no_entry_sign: (required)
-`prematureExpirationTime`|Time in ms for the access token to expire before it is meant to|`10000`
+`prematureExpirationTime`|Time in ms for the access token to expire before it is meant to (Not implemented yet)|`10000`
 `autoAuthorize`|Will call automatically call authorize() when needed|`true`
 `smartRetry`|Will retry Twitch API requests up to 10 times if the server response is invalid|`true`
 
@@ -102,3 +102,5 @@ node_modules/.bin/twitch-helix --client-id xxx --client-secret xxx "users?login=
 
 This will print:
 [![Command Line Output](https://i.imgur.com/PTdBOQW.png)](https://i.imgur.com/PTdBOQW.png)
+
+Use the `--kraken` flag to query data from a Kraken endpoint instead of a Helix endpoint.

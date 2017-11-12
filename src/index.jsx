@@ -145,9 +145,14 @@ module.exports = class TwitchHelix extends EventEmitter {
         })
     })
 
+    getTwitchUserById = async id => {
+        const data = await this.sendHelixRequest(`users?id=${id}`)
+        return data[0] ? data[0] : null
+    }
+
     getTwitchUserByName = async username => {
         const data = await this.sendHelixRequest(`users?login=${username}`)
-        return data[0]
+        return data[0] ? data[0] : null
     }
 
     getTwitchUsersByName = async usernames => {

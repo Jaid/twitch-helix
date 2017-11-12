@@ -65,11 +65,14 @@ Field|Info|Default value
 
 Some of the common queries are wrapped into neat functions. Those are:
 
-- Promise `getTwitchUserByName(username: string)` returns a Twitch user info object (as shown in above example)
-- Promise `getTwitchUsersByName(usernames: Array<string>)` returns an array of Twitch user info objects
-- Promise `getStreamInfoById(id: string)` returns a Twitch stream object if user is currently streaming or `null` otherwise
-- Promise `getStreamInfoByUsername(username: string)` returns a Twitch stream object if user is currently streaming or `null` otherwise
-- Promise `getFollowDate(streamerId: string, followerId: string)` returns a `Date` if follower follows streamer or `null` otherwise
+Promise|Name|Parameters|Return Value|Further info
+---|---|---|---|---
+Yes|`getTwitchUserById`|string `id`|Twitch user info object
+Yes|`getTwitchUserByName`|string `username`|Twitch user info object
+Yes|`getTwitchUsersByName`|Array<string> `usernames`|Array of Twitch user info objects
+Yes|`getStreamInfoById`|string `id`|Twitch stream object if user is currently streaming or `null` otherwise
+Yes|`getStreamInfoByUsername`|string `username`|Twitch stream object if user is currently streaming or `null` otherwise
+Yes|`getFollowDate`|string `streamerId`, string `followerId`|`Date` if follower follows streamer or `null` otherwise
 
 #### Custom queries
 

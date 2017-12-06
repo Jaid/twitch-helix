@@ -88,13 +88,14 @@ module.exports = class TwitchHelix extends EventEmitter {
         return false
     }
 
-    sendHelixRequest = async query => {
-        const apiResponse = await this.sendApiRequest(query)
+    sendHelixRequest = async (query, options) => {
+        const apiResponse = await this.sendApiRequest(query, options)
         return apiResponse.body.data
     }
 
     sendApiRequest = (query, options = {}) => new Promise(async (resolve, reject) => {
         const {
+            requestOptions,
             api = "helix"
         } = options
         await this.autoAuthorize()
@@ -119,6 +120,9 @@ module.exports = class TwitchHelix extends EventEmitter {
             })
         } else {
             throw new Error(`Unknown Twitch API ${api}`)
+        }
+        if (requestOptions) {
+            Object.assign(queryOptions, requestOptions)
         }
         if (this.options.smartRetry) {
             queryOptions = Object.assign(queryOptions, {
@@ -146,13 +150,23 @@ module.exports = class TwitchHelix extends EventEmitter {
     })
 
     getTwitchUserById = async id => {
-        const data = await this.sendHelixRequest(`users?id=${id}`)
-        return data[0] ? data[0] : null
+        const data = await this.sendHelixRequest("users", {
+            requestOptions: {
+                qs: {id}
+            }
+        })
+        return data[0] || null
     }
 
     getTwitchUserByName = async username => {
-        const data = await this.sendHelixRequest(`users?login=${username}`)
-        return data[0] ? data[0] : null
+        const data = await this.sendHelixRequest("users", {
+            requestOptions: {
+                qs: {
+                    login: username
+                }
+            }
+        })
+        return data[0] || null
     }
 
     getTwitchUsersByName = async usernames => {
@@ -161,24 +175,49 @@ module.exports = class TwitchHelix extends EventEmitter {
         }
         const queryPromises = []
         for (const usernamesChunk of lodash.chunk(usernames, 100)) { // /users endpoint has a cap of 100, so we split the query into chunks
-            queryPromises.push(this.sendHelixRequest("users?login=" + usernamesChunk.join("&login=")))
+            queryPromises.push(this.sendHelixRequest("users", {
+                requestOptions: {
+                    qs: {
+                        login: usernamesChunk
+                    }
+                }
+            }))
         }
         const twitchUsers = await Promise.all(queryPromises)
         return lodash.flatten(twitchUsers)
     }
 
     getStreamInfoById = async id => {
-        const data = await this.sendHelixRequest(`streams?user_id=${id}`)
-        return data[0] ? data[0] : null
+        const data = await this.sendHelixRequest("streams", {
+            requestOptions: {
+                qs: {
+                    user_id: id
+                }
+            }
+        })
+        return data[0] || null
     }
 
     getStreamInfoByUsername = async username => {
-        const data = await this.sendHelixRequest(`streams?user_login=${username}`)
-        return data[0] ? data[0] : null
+        const data = await this.sendHelixRequest("streams", {
+            requestOptions: {
+                qs: {
+                    user_login: username
+                }
+            }
+        })
+        return data[0] || null
     }
 
     getFollowDate = async (streamer_id, follower_id) => {
-        const data = await this.sendHelixRequest(`users/follows?to_id=${streamer_id}&from_id=${follower_id}`)
+        const data = await this.sendHelixRequest("users/follows", {
+            requestOptions: {
+                qs: {
+                    to_id: streamer_id,
+                    from_id: follower_id
+                }
+            }
+        })
         return data[0] ? new Date(data[0].followed_at) : null
     }
 

@@ -32,6 +32,7 @@ module.exports = class TwitchHelix extends EventEmitter {
         this.accessToken = null
         this.refreshToken = null // TODO Implement autoRefresh
         this.tokenExpiration = null
+        this.rateLimit = null
     }
 
     log = (level, message) => {
@@ -68,6 +69,13 @@ module.exports = class TwitchHelix extends EventEmitter {
     }
 
     shouldRetryRequest = (error, response, body) => {
+        if (response.headers) {
+            this.rateLimit = {
+                limit: response.headers["ratelimit-limit"],
+                ramaining: response.headers["ratelimit-remaining"],
+                resetDate: response.headers["ratelimit-reset"]
+            }
+        }
         const getRetryReason = (error, response, body) => {
             if (request.RetryStrategies.HTTPOrNetworkError(error, response)) {
                 return response && response.statusCode ? `${response.statusCode} ${response.statusMessage}` : (error.message || error)
@@ -75,7 +83,9 @@ module.exports = class TwitchHelix extends EventEmitter {
             if (!body) {
                 return "Received no response body"
             }
-            if (["Bad Request"].includes(body.error)) {
+            // Bad Request: ?Ad
+            // Unauthorized: Retrying because Twitch randomly says "Must provide a valid Client-ID or OAuth token" sometimes
+            if (["Bad Request", "Unauthorized"].includes(body.error)) {
                 return body.error
             }
         }

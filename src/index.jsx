@@ -72,7 +72,7 @@ module.exports = class TwitchHelix extends EventEmitter {
         if (response.headers) {
             this.rateLimit = {
                 limit: response.headers["ratelimit-limit"],
-                ramaining: response.headers["ratelimit-remaining"],
+                remaining: response.headers["ratelimit-remaining"],
                 resetDate: response.headers["ratelimit-reset"]
             }
         }

@@ -141,7 +141,7 @@ module.exports = class TwitchHelix extends EventEmitter {
                 retryStrategy: this.shouldRetryRequest
             })
         }
-        request.get(query, queryOptions, (error, response, body) => {
+        request(query, queryOptions, (error, response, body) => {
             if (response && response.request) {
                 this.log("info", `${response.request.method} ${response.request.href}`)
             }
